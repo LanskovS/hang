@@ -1,0 +1,62 @@
+import random
+menu = ["play", "results", "exit"]
+won = 0
+lost = 0
+print("H A N G M A N")
+menu_c = input('Type "play" to play the game, "results" to show the scoreboard, and "exit" to quit:')
+while menu_c in menu:
+    if menu_c == "exit":
+        break
+    if menu_c == "results":
+        print("You won:", won, "times")
+        print("You lost:", lost, "times")
+        menu_c = input('Type "play" to play the game, "results" to show the scoreboard, and "exit" to quit:')
+    if menu_c == "play":
+        word = ["python", "java", "swift", "javascript"]
+        answer = random.choice(word)  # рандомное слово из списка
+        guesses = 8  # кол-во жизней
+        hangman = []  # список висяк
+        wrong_hangman = []  # обрати внимание
+        for _ in range(len(answer)):  # цикл повторяется столько раз, сколько букв в слове
+            hangman += "-"  # в список висяк добавляется черточка
+        while guesses > 0 and list(answer) != hangman:  # пока кол-во жизней положительно
+            print()  # печатаем пустоту
+            print("".join(hangman))  # добавляем в список висяк...ПРОБЕЛ?
+            guess = input("Input a letter: ")  # cпрашиваем у чела букву
+            if guess in wrong_hangman:
+                print("You've already guessed this letter")
+                continue
+
+            if len(guess) != 1:
+                print("Please, input a single letter")
+                continue
+            if guess.islower() == False:
+                print("Please, enter a lowercase letter from the English alphabet.")
+                continue
+
+            if hangman == list(answer):  # если список висяк == списку рандомное слово из списка
+                break  # прервать
+            if guess in answer:  # буква в рандомном слове - истина
+                if guess in hangman:  # если буква в списка висяк - истина
+
+                    print("You've already guessed this letter")
+                    pass
+                for _ in range(len(answer)):  # цикл повторяется столько раз, сколько букв в слове
+                    if guess == answer[_]:
+                        hangman[_] = guess
+            else:
+                wrong_hangman.append(guess)
+                guesses -= 1
+                if list(answer) not in wrong_hangman:
+                    print("That letter doesn't appear in the word")
+                if guesses == 0:
+                    lost += 1
+                    print("You lost!")
+                    menu_c = input('Type "play" to play the game, "results" to show the scoreboard, and "exit" to quit:')
+                if wrong_hangman == list(answer):
+                    print("You've already guessed this letter")
+        if list(answer) == hangman:
+            print("You guessed the word", answer + "!", "You survived!")
+
+            won += 1
+            menu_c = input('Type "play" to play the game, "results" to show the scoreboard, and "exit" to quit:')
